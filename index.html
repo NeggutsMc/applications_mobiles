@@ -50,7 +50,7 @@
   </template>
 
   <template id="ligne_acteur">
-    <ons-list-item>
+    <ons-list-item onclick="myNavigator.pushPage('films_par_acteur.html', {data: {personne_id: this.dataset.personnes_id}})">
       <div class="left">
         <img class="list-item__thumbnail" src="_inconnu.jpg">
       </div>
@@ -65,10 +65,14 @@
   <script>
     document.addEventListener('init', function(event) {
       var page = event.target;
+      console.log(page.data);
       
       if (page.id === 'page_acteur') {
         getActeurs(page);
-      } 
+      }
+      else if (page.id == 'page_films_par_acteur') {
+        getActeurs(page);
+      }
       else if (page.id === 'page_carte') {
         var map = L.map('map').setView([45, 0], 13);
         
@@ -161,26 +165,39 @@
         }
         */
     }
-    
-    function loadImage(element, url) {
-      const portrait = new Image();
-      portrait.src = url
-      portrait.onload = function() {
-        element.src = url;
-      }  
+
+    async function getFilms(page, personne_id) {
+      const data = await fetch(`https://morseweiswlpykaugwtd.supabase.co/functions/v1/detail?personne_id=${personne_id}`,
+              {
+                headers:
+                        {
+                          apikey: ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vcnNld2Vpc3dscHlrYXVnd3RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY5NTcxMjgsImV4cCI6MjAyMjUzMzEyOH0.UV5XCINWe-Jaw6_-787Veh-LxjzUVudArvrgH6Ycf30',
+                          "content-type": "application/json"
+                        },
+              }
+      );
     }
 
-    function createItemActeur(index) {
-      const nouvelElement = document.getElementById("ligne_acteur").content.cloneNode(true);
-      
-      nouvelElement.dataset.personnes_id = listePersonnes[index].personne_id;
-      nouvelElement.querySelector(".list-item__title").textContent = listePersonnes[index].nom;
-      nouvelElement.querySelector(".list-item__subtitle").textContent = listePersonnes[index].age??"décédé";
+      function loadImage(element, url) {
+        const portrait = new Image();
+        portrait.src = url
+        portrait.onload = function () {
+          element.src = url;
+        }
+      }
 
-      loadImage(nouvelElement.querySelector(".list-item__thumbnail"),
-          `https://morseweiswlpykaugwtd.supabase.co/storage/v1/object/public/personnes/${listePersonnes[index].personne_id}.jpg`)
+      function createItemActeur(index) {
+        const nouvelElement = document.getElementById("ligne_acteur").content.cloneNode(true);
 
-      return nouvelElement.firstElementChild;
+        nouvelElement.firstElementChild.dataset.personnes_id = listePersonnes[index].personne_id;
+        nouvelElement.querySelector(".list-item__title").textContent = listePersonnes[index].nom;
+        nouvelElement.querySelector(".list-item__subtitle").textContent = listePersonnes[index].age ?? "décédé";
+
+        loadImage(nouvelElement.querySelector(".list-item__thumbnail"),
+                `https://morseweiswlpykaugwtd.supabase.co/storage/v1/object/public/personnes/${listePersonnes[index].personne_id}.jpg`)
+
+        return nouvelElement.firstElementChild;
+      }
     }
   </script>
 </body>
