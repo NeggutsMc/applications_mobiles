@@ -60,7 +60,17 @@
       </div>
     </ons-list-item>
   </template>
-
+  <template id="ligne_film">
+    <ons-list-item>
+      <div class="left">
+        <img class="list-item__thumbnail" src="_inconnu.jpg">
+      </div>
+      <div class="center">
+        <span class="list-item__title">${film.titre}</span>
+        <span class="list-item__subtitle">${film.annee}</span>
+      </div>
+    </ons-list-item>
+  </template>
 
   <script>
     document.addEventListener('init', function(event) {
