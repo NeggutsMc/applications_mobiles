@@ -166,16 +166,22 @@
         */
     }
 
-    async function getFilms(page, personne_id) {
-      const data = await fetch(`https://morseweiswlpykaugwtd.supabase.co/functions/v1/detail?personne_id=${personne_id}`,
-              {
-                headers:
-                        {
-                          apikey: ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vcnNld2Vpc3dscHlrYXVnd3RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY5NTcxMjgsImV4cCI6MjAyMjUzMzEyOH0.UV5XCINWe-Jaw6_-787Veh-LxjzUVudArvrgH6Ycf30',
-                          "content-type": "application/json"
-                        },
-              }
-      );
+    async function getFilms(page) {
+      const data = await fetch(`https://morseweiswlpykaugwtd.supabase.co/functions/v1/detail`, {
+        method: 'POST',
+        headers: {
+          apikey: ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vcnNld2Vpc3dscHlrYXVnd3RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY5NTcxMjgsImV4cCI6MjAyMjUzMzEyOH0.UV5XCINWe-Jaw6_-787Veh-LxjzUVudArvrgH6Ycf30',
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            "personne_id": page.data.personnes_id
+        })
+      });
+      const films = await data.json();
+      console.log(data);
+
+      for (const film of films) {
+
     }
 
       function loadImage(element, url) {
